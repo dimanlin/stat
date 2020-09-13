@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  evid: MyString
+  vendor_site_id: MyString
+  vendor_visit_id: MyString
+  visit_ip: MyString
+  vendor_visitor_id: MyString
+
+two:
+  evid: MyString
+  vendor_site_id: MyString
+  vendor_visit_id: MyString
+  visit_ip: MyString
+  vendor_visitor_id: MyString
