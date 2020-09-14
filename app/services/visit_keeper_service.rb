@@ -61,15 +61,16 @@ class VisitKeeperService
   def save_page_views
     page_views = []
     @visits.each_with_index do |visit, index|
-      visit['actionDetails'].each do |page_view|
+      visit['actionDetails'].uniq.each_with_index do |page_view, index|
         current_time = Time.current
         page_views << {  visit_id: @next_visit_id + index,
-                        title: page_view['pageTitle'],
-                        url: page_view['url'],
-                        time_spent: page_view['timeSpent'],
-                        timestamp: page_view['timestamp'],
-                        created_at: current_time,
-                        updated_at: current_time }
+                         title: page_view['pageTitle'],
+                         url: page_view['url'],
+                         position: index + 1,
+                         time_spent: page_view['timeSpent'],
+                         timestamp: page_view['timestamp'],
+                         created_at: current_time,
+                         updated_at: current_time }
       end
     end
 

@@ -74,8 +74,7 @@ RSpec.describe VisitKeeperService do
     it 'should create only 2 visits' do
       expect do
         VisitKeeperService.new(visits).call
-      end.to change { PageView.count }.from(0).to(16)
+      end.to change { PageView.count }.from(0).to(15)
     end
   end
-
 end
