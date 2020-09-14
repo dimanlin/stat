@@ -4,5 +4,5 @@ task :update_statistics => :environment do
 
   response = Net::HTTP.get(uri)
   visits = JSON.parse(response)
-  VisitKeeperService.new(visits).save
+  VisitKeeperService.new(visits).call
 end

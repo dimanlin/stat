@@ -2,8 +2,7 @@ class VisitKeeperService
 
   REFERRER_NAME_REG = /\A[A-z0-9]{8}-[A-z0-9]{4}-[A-z0-9]{4}-[A-z0-9]{4}-[A-z0-9]{12}\z/
 
-  attr_accessor :visits
-  attr_accessor :last_visit_id
+  attr_reader :visits
 
   def initialize(visits)
     Visit.delete_all
@@ -13,7 +12,7 @@ class VisitKeeperService
     @next_visit_id = next_auto_increment
   end
 
-  def save
+  def call
     save_visits
     save_page_views
   end
@@ -23,7 +22,7 @@ class VisitKeeperService
   # Find next auto_increment (id)
   def next_auto_increment
     if Visit.count > 0
-      Visit.last.id
+      Visit.last.id + 1
     else
       tmp_visit = Visit.create(evid: '00000000-0000-0000-0000-000000000000')
       auto_increment = tmp_visit.id + 1
@@ -50,13 +49,13 @@ class VisitKeeperService
                         vendor_site_id: visit['idSite'],
                         vendor_visit_id: visit['idVisit'],
                         visit_ip: visit['visitIp'],
-                        vendor_visitor_id: visit['visitoriId'],
+                        vendor_visitor_id: visit['visitorId'],
                         created_at: current_time,
                         updated_at: current_time}
 
     end
 
-    Visit.insert_all(hash_visits)
+    hash_visits.present? ? Visit.insert_all(hash_visits) : false
   end
 
   def save_page_views
@@ -74,6 +73,6 @@ class VisitKeeperService
       end
     end
 
-    PageView.insert_all(page_views)
+    page_views.present? ? PageView.insert_all(page_views) : false
   end
 end
