@@ -3,7 +3,7 @@ class CreatePageviews < ActiveRecord::Migration[6.0]
     create_table :page_views do |t|
       t.bigint :visit_id
       t.string :title
-      t.string :position
+      t.integer :position
       t.string :url
       t.string :time_spent
       t.decimal :timestamp, precision: 14, scale: 3

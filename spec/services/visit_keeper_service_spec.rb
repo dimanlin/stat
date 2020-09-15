@@ -77,4 +77,13 @@ RSpec.describe VisitKeeperService do
       end.to change { PageView.count }.from(0).to(15)
     end
   end
+
+  describe 'Position field' do
+    it 'should be correct filling' do
+      VisitKeeperService.new(visits).call
+
+      expect(Visit.last.page_views.pluck(:position)).to eq((1..5).to_a)
+      expect(Visit.first.page_views.pluck(:position)).to eq((1..10).to_a)
+    end
+  end
 end

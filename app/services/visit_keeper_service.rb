@@ -60,20 +60,21 @@ class VisitKeeperService
 
   def save_page_views
     page_views = []
-    @visits.each_with_index do |visit, index|
-      visit['actionDetails'].uniq.each_with_index do |page_view, index|
+    @visits.each_with_index do |visit, visit_index|
+      visit['actionDetails'].uniq.each_with_index do |page_view, page_view_index|
+        # byebug
         current_time = Time.current
-        page_views << {  visit_id: @next_visit_id + index,
+        page_views << {  visit_id: @next_visit_id + visit_index,
                          title: page_view['pageTitle'],
                          url: page_view['url'],
-                         position: index + 1,
+                         position: page_view_index + 1,
                          time_spent: page_view['timeSpent'],
                          timestamp: page_view['timestamp'],
                          created_at: current_time,
                          updated_at: current_time }
       end
     end
-
+    # byebug
     page_views.present? ? PageView.insert_all(page_views) : false
   end
 end

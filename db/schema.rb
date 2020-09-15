@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(version: 2020_09_12_082042) do
   create_table "page_views", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "visit_id"
     t.string "title"
-    t.string "position"
+    t.integer "position"
     t.string "url"
     t.string "time_spent"
     t.decimal "timestamp", precision: 14, scale: 3
