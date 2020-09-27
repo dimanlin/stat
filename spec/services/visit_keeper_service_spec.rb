@@ -40,8 +40,13 @@ RSpec.describe VisitKeeperService do
 
   describe "#next_auto_increment" do
     context "Model Visit have rows" do
-      it "return id next element" do
+      before do
         FactoryBot.create(:visit)
+      end
+
+      it "return id next element" do
+        expect(Visit).to receive(:delete_all)
+        expect(PageView).to receive(:delete_all)
         expect(VisitKeeperService.new([]).send(:next_auto_increment) > 0).to be_truthy
       end
     end
