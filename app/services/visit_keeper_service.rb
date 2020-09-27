@@ -24,7 +24,7 @@ class VisitKeeperService
     if Visit.count > 0
       Visit.last.id + 1
     else
-      tmp_visit = Visit.create(evid: '00000000-0000-0000-0000-000000000000')
+      tmp_visit = Visit.create(evid: "00000000-0000-0000-0000-000000000000")
       auto_increment = tmp_visit.id + 1
       tmp_visit.delete
       auto_increment
@@ -33,11 +33,11 @@ class VisitKeeperService
 
   def prepare_visits(visits)
     visits.collect! do |visit|
-      visit['referrerName'].gsub!('evid_', '')
+      visit["referrerName"].gsub!("evid_", "")
       visit
     end
 
-    visits.select { |visit| REFERRER_NAME_REG.match?(visit['referrerName']) }
+    visits.select { |visit| REFERRER_NAME_REG.match?(visit["referrerName"]) }
   end
 
   def save_visits
@@ -45,13 +45,13 @@ class VisitKeeperService
 
     @visits.each do |visit|
       current_time = Time.current
-      hash_visits << {  evid: visit['referrerName'].gsub('evid_', ''),
-                        vendor_site_id: visit['idSite'],
-                        vendor_visit_id: visit['idVisit'],
-                        visit_ip: visit['visitIp'],
-                        vendor_visitor_id: visit['visitorId'],
-                        created_at: current_time,
-                        updated_at: current_time}
+      hash_visits << {evid: visit["referrerName"].gsub("evid_", ""),
+                      vendor_site_id: visit["idSite"],
+                      vendor_visit_id: visit["idVisit"],
+                      visit_ip: visit["visitIp"],
+                      vendor_visitor_id: visit["visitorId"],
+                      created_at: current_time,
+                      updated_at: current_time}
 
     end
 
@@ -61,20 +61,22 @@ class VisitKeeperService
   def save_page_views
     page_views = []
     @visits.each_with_index do |visit, visit_index|
-      visit['actionDetails'].uniq.each_with_index do |page_view, page_view_index|
-        # byebug
+
+      sorted_action_details = visit["actionDetails"].uniq.sort_by { |a| a["serverTimePretty"] }
+
+      sorted_action_details.each_with_index do |page_view, page_view_index|
         current_time = Time.current
-        page_views << {  visit_id: @next_visit_id + visit_index,
-                         title: page_view['pageTitle'],
-                         url: page_view['url'],
-                         position: page_view_index + 1,
-                         time_spent: page_view['timeSpent'],
-                         timestamp: page_view['timestamp'],
-                         created_at: current_time,
-                         updated_at: current_time }
+        page_views << {visit_id: @next_visit_id + visit_index,
+                       title: page_view["pageTitle"],
+                       url: page_view["url"],
+                       position: page_view_index + 1,
+                       time_spent: page_view["timeSpent"],
+                       timestamp: page_view["timestamp"],
+                       created_at: current_time,
+                       updated_at: current_time}
       end
     end
-    # byebug
+
     page_views.present? ? PageView.insert_all(page_views) : false
   end
 end
