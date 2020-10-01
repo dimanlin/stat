@@ -1,0 +1,38 @@
+version: '3'
+services:
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  shastic_challenge:
+    build:
+      context: .
+      dockerfile: ./docker/app/Dockerfile
+    links:
+      - mysql
+    volumes:
+      - ./:/app
+    stdin_open: true
+    tty: true
+    environment:
+      RAILS_ENV: 'production'
+      FAKE_SERVER_HOST: 'http://37.235.233.126:4567/samples/api_response.json'
+      MYSQL5_7_UESRNAME: 'root'
+      MYSQL5_7_ROOT_PASSWORD: 'pass'
+      MYSQL5_7_HOST: mysql
+      MYSQL5_7_PORT: 3306
+
+
+  mysql:
+    build:
+      context: .
+      dockerfile: ./docker/mysql/Dockerfile
+    command: [mysqld, --character-set-server=utf8, --collation-server=utf8_unicode_ci]
+    ports:
+      - 3306:3306
+    volumes:
+      - ./:/app
+    environment:
+      MYSQL_ROOT_PASSWORD: 'pass'

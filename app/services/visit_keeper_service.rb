@@ -8,8 +8,8 @@ class VisitKeeperService
     Visit.delete_all
     PageView.delete_all
 
-    @visits = prepare_visits(visits)
     @next_visit_id = next_auto_increment
+    @visits = prepare_visits(visits)
   end
 
   def call
@@ -66,6 +66,7 @@ class VisitKeeperService
 
       sorted_action_details.each_with_index do |page_view, page_view_index|
         current_time = Time.current
+
         page_views << {visit_id: @next_visit_id + visit_index,
                        title: page_view["pageTitle"],
                        url: page_view["url"],

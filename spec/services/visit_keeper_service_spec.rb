@@ -85,7 +85,7 @@ RSpec.describe VisitKeeperService do
   describe "Position field" do
     it "should be correct filling" do
       VisitKeeperService.new(visits).call
-
+      expect(Visit.count).to eq(2)
       expect(Visit.last.page_views.pluck(:position)).to eq((1..5).to_a)
       expect(Visit.first.page_views.pluck(:position)).to eq((1..10).to_a)
     end
